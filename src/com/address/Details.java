@@ -1,8 +1,7 @@
-package com.address.book;
+package com.address;
 
 
-public class AddressBookMain
-{
+public class Details {
     private String firstName;
     private String lastName;
     private String address;
@@ -12,7 +11,7 @@ public class AddressBookMain
     private String email;
     private String phoneNumber ;
 
-    public AddressBookMain(String firstName, String lastName, String address, String city, String state, String email, String phoneNumber, String zip) {
+    public Details(String firstName, String lastName, String address, String city, String state, String email, String phoneNumber, String zip) {
         setFirstName(firstName);
         setLastName(lastName);
         setAddress(address);
@@ -86,11 +85,5 @@ public class AddressBookMain
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public static void main( String[] args )
-    {
-        System.out.println( "Welcome to Address Book System" );
-
     }
 }
