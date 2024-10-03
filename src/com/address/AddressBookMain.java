@@ -153,6 +153,18 @@ class AddressBook {
         return contacts;
     }
 
+    public List<Contact> searchByCity(String city) {
+        return contacts.stream()
+                .filter(contact -> contact.getCity().equalsIgnoreCase(city))
+                .collect(Collectors.toList());
+    }
+
+    public List<Contact> searchByState(String state) {
+        return contacts.stream()
+                .filter(contact -> contact.getState().equalsIgnoreCase(state))
+                .collect(Collectors.toList());
+    }
+
     @Override
     public String toString() {
         return "AddressBook{" +
@@ -172,7 +184,8 @@ public class AddressBookMain {
             System.out.println("Address Book System Menu:");
             System.out.println("1. Create New Address Book");
             System.out.println("2. Select Address Book");
-            System.out.println("3. Exit");
+            System.out.println("3. Search Across Address Books");
+            System.out.println("4. Exit");
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
@@ -186,6 +199,9 @@ public class AddressBookMain {
                     selectAddressBook(scanner);
                     break;
                 case 3:
+                    searchAcrossAddressBooks(scanner);
+                    break;
+                case 4:
                     exit = true;
                     break;
                 default:
@@ -311,8 +327,6 @@ public class AddressBookMain {
         Contact contact = addressBook.findContactByName(firstName, lastName);
 
         if (contact != null) {
-            System.out.println("Editing contact: " + contact);
-
             System.out.print("Enter new City (leave blank to keep current): ");
             String city = scanner.nextLine();
             if (!city.isBlank()) {
@@ -362,6 +376,40 @@ public class AddressBookMain {
             System.out.println("Contact deleted successfully!");
         } else {
             System.out.println("Contact not found.");
+        }
+    }
+
+    private static void searchAcrossAddressBooks(Scanner scanner) {
+        System.out.print("Enter city to search: ");
+        String city = scanner.nextLine();
+        List<Contact> results = new ArrayList<>();
+
+        for (Map.Entry<String, AddressBook> entry : addressBookMap.entrySet()) {
+            List<Contact> contactsInCity = entry.getValue().searchByCity(city);
+            results.addAll(contactsInCity);
+        }
+
+        if (!results.isEmpty()) {
+            System.out.println("Contacts found in city '" + city + "':");
+            results.forEach(System.out::println);
+        } else {
+            System.out.println("No contacts found in city '" + city + "'.");
+        }
+
+        System.out.print("Enter state to search: ");
+        String state = scanner.nextLine();
+        results.clear();
+
+        for (Map.Entry<String, AddressBook> entry : addressBookMap.entrySet()) {
+            List<Contact> contactsInState = entry.getValue().searchByState(state);
+            results.addAll(contactsInState);
+        }
+
+        if (!results.isEmpty()) {
+            System.out.println("Contacts found in state '" + state + "':");
+            results.forEach(System.out::println);
+        } else {
+            System.out.println("No contacts found in state '" + state + "'.");
         }
     }
 }
